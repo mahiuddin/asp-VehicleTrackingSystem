@@ -1,87 +1,64 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VehicleTrackingSystem.Model.Models;
+using VehicleTrackingSystem.Services;
 
 namespace VehicleTrackingSystem.Controllers
 {
-    public class DevicesController : Controller
+    [ApiController]
+    public class DevicesController : ControllerBase
     {
-        // GET: DevicesController
-        public ActionResult Index()
+        private IDeviceData _deviceData;
+        public DevicesController(IDeviceData deviceData)
         {
-            return View();
+            _deviceData = deviceData;
+
         }
 
-        // GET: DevicesController/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        [Route("api/[controller]")]
+        public IActionResult GetDevices() 
         {
-            return View();
+            return Ok(_deviceData.GetDevices());
         }
 
-        // GET: DevicesController/Create
-        public ActionResult Create()
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
+        public IActionResult GetDevice(int id)
         {
-            return View();
+            var device = _deviceData.GetDevice(id);
+            if(device != null)
+            {
+                return Ok(device);
+            }
+            return NotFound($"Device with id: {id} was not found");
         }
 
-        // POST: DevicesController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [Route("api/[controller]")]
+        public IActionResult GetDevice(Device device)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            _deviceData.AddDevice(device);
+            
+            return Created(HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path + "/" + device.DeviceId, device);
         }
 
-        // GET: DevicesController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpDelete]
+        [Route("api/[controller]/{id}")]
+        public IActionResult DeleteDevice(int id)
         {
-            return View();
-        }
+            var device = _deviceData.GetDevice(id);
 
-        // POST: DevicesController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            if(device != null)
             {
-                return RedirectToAction(nameof(Index));
+                _deviceData.DeleteDevice(device);
+                return Ok();
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: DevicesController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: DevicesController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return NotFound($"Device with id: {id} was not found");
         }
     }
 }

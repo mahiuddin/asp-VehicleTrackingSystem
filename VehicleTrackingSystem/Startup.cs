@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VehicleTrackingSystem.DataAccess.Data;
+using VehicleTrackingSystem.Services;
 
 namespace VehicleTrackingSystem
 {
@@ -31,6 +32,9 @@ namespace VehicleTrackingSystem
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SqlServer")));
 
             services.AddControllers();
+            // services.AddSingleton<IDeviceData, DeviceData>();
+            services.AddScoped<IDeviceData, DeviceData>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "VehicleTrackingSystem", Version = "v1" });
