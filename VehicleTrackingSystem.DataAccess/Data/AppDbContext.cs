@@ -14,6 +14,7 @@ namespace VehicleTrackingSystem.DataAccess.Data
         {
         }
 
+        
         // Table set
         public DbSet<UserType> UserType { get; set; }
         public DbSet<User> User { get; set; }

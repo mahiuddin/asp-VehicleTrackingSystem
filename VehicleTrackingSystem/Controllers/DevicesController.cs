@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using VehicleTrackingSystem.Auth;
 using VehicleTrackingSystem.Model.Models;
 using VehicleTrackingSystem.Services;
 
 namespace VehicleTrackingSystem.Controllers
 {
+    [Authorize(Roles = UserRoles.Admin)]
     [ApiController]
     public class DevicesController : ControllerBase
     {
@@ -15,7 +18,6 @@ namespace VehicleTrackingSystem.Controllers
         public DevicesController(IDeviceData deviceData)
         {
             _deviceData = deviceData;
-
         }
 
         [HttpGet]

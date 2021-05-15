@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VehicleTrackingSystem.DataAccess.Data;
 using VehicleTrackingSystem.Model.Models;
+using VehicleTrackingSystem.Validator;
 
 namespace VehicleTrackingSystem.Services
 {
@@ -59,6 +60,12 @@ namespace VehicleTrackingSystem.Services
         }
 
         public Device EditDevice(Device device)
+        {
+            bool right = IsPermittedToEditVehicle("1", 23);
+            throw new NotImplementedException();
+        }
+
+        private bool IsPermittedToEditVehicle(string v1, int v2)
         {
             throw new NotImplementedException();
         }
